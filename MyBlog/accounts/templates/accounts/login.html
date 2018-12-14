@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% load bootstrap4 %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Login Page</title>
+  </head>
+  <body>
+    <div class="jumbotron">
+      <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="submit" class="btn btn-primary" value="Login">
+      </form>
+    </div>
+
+  </body>
+</html>

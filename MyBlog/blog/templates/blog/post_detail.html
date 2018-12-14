@@ -1,0 +1,70 @@
+{%extends "blog/base.html" %}
+{% block content %}
+<h1 class="posttitle loader">{{post.title}}</h1>
+
+{% if post.published_date %}
+<div class="date postdate">
+{{post.published_date}}
+</div>
+{% endif%}
+<p class="postcontent">{{post.title|safe|linebreaksbr}}</p>
+<p class="postcontent">{{post.text|safe|linebreaksbr}}</p>
+
+<p>{% if post.author.username %}</p>
+{{post.author.username}}
+{% else %}
+<p>Anonymous</p>
+{% endif %}
+
+{% if user.is_authenticated %}
+
+      {% if user.email == post.author.email %}
+      <a class="btn btn-primary" href="{% url 'blog:post_edit' pk=post.pk %}">Edit</a>
+          {% if post.published_date is null %}
+              <a class="btn btn-default" href="{% url 'blog:post_publish' pk=post.pk %}">Publish</a>
+          {% else %}
+              <p>Published on: {{ post.published_date }}</p>
+          {% endif %}
+      <a class="btn btn-primary" href="{% url 'blog:post_remove' pk=post.pk %}">Remove</a>
+      {% endif %}
+      <hr>
+      <a class="btn btn-primary" href="{% url 'blog:add_comments_to_post' pk=post.pk %}">Add comments</a>
+      <div class="continer">
+
+      {% for comment in post.comments.all %}
+
+        <br>
+          {% if comment.approved_comment %}
+            {{comment.created_date}}
+
+                {% if user.email == comment.author or user.email == post.author.email %}
+                  <a class="btn btn-primary" href="{% url 'blog:comment_remove' pk=comment.pk %}">Remove1</a>
+                {% endif %}
+
+          <p>{{comment.text|safe|linebreaksbr}}</p>
+          <p>Posted by: {{comment.author}}</p>
+
+          {% else %}
+
+          {{comment.created_date}}
+
+              {% if user.email == post.author.email %}
+              <a class="btn btn-primary" href="{% url 'blog:comment_approve' pk=comment.pk %}">Approve</a>
+              {% endif %}
+
+              {% if user.email == comment.author or user.email == post.author.email %}
+                <a class="btn btn-primary" href="{% url 'blog:comment_remove' pk=comment.pk %}">Remove1</a>
+              {% endif %}
+
+        <p>{{comment.text|safe|linebreaksbr}}</p>
+        <p>Posted by: {{comment.author}}</p>
+          {%endif%}
+
+          {% empty %}
+          <p>No comments</p>
+        {% endfor %}
+
+      </div>
+{% endif%}
+
+{% endblock %}
